@@ -4,6 +4,7 @@ import { auth as authApi, calculations, systems } from "../../api/endpoints";
 import { useAuth } from "../../auth/AuthContext";
 import { PageHead } from "../../components/AppShell";
 import { EstimateResult, EstimatorForm } from "../../components/Estimator";
+import { MiniRoof } from "../../components/Illustrations";
 import { Empty, ErrorNote, Loading, Pager, useAsync, usePaged, useToast } from "../../components/ui";
 import { date, num } from "../../utils/format";
 
@@ -18,6 +19,16 @@ export function UserHome() {
   return (
     <>
       <PageHead title={firstName ? `Hola, ${firstName}` : "Hola"}>Este es el estado de tu proyecto solar.</PageHead>
+      <section className="welcome">
+        <div>
+          <h2 style={{ margin: "0 0 4px", fontSize: "var(--step-1)" }}>Tu techo puede producir tu propia energía</h2>
+          <p>Calcula tu sistema, guárdalo y el equipo de Green Saver te envía la cotización.</p>
+          <Link className="btn btn-primary" to="/app/calcular" style={{ marginTop: 12 }}>
+            Nuevo cálculo
+          </Link>
+        </div>
+        <MiniRoof className="welcome-art" />
+      </section>
       <div className="grid-2">
         <section className="panel">
           <div className="panel-head">

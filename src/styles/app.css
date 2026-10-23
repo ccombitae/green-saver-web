@@ -253,3 +253,17 @@ table.data td.right, table.data th.right { text-align: right; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 .legend i.dash { height: 3px; border-radius: 0; }
+
+/* ---------------------------------------------------------------- ilustraciones */
+.hero-art { display: block; width: 100%; max-width: 560px; height: auto; margin-top: 32px; filter: drop-shadow(0 18px 30px rgba(10,60,35,.14)); }
+.gs-sun { transform-origin: 488px 86px; animation: gs-pulse 6s ease-in-out infinite; }
+@keyframes gs-pulse { 50% { opacity: .85; } }
+.step-icon { width: 56px; height: 56px; display: block; margin-bottom: 12px; }
+.steps li::before { display: none; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+.auth-art { display: block; width: 100%; max-width: 440px; height: auto; margin-top: 28px; }
+.welcome-art { width: 150px; height: auto; flex: none; }
+.welcome { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: linear-gradient(120deg, var(--leaf-soft), var(--sun-soft)); border-radius: 20px; padding: 18px 22px; margin-bottom: var(--gap); }
+.welcome p { margin: 0; color: var(--ink-2); }
+@media (max-width: 860px) { .auth-art { display: none; } }
+@media (max-width: 640px) { .welcome-art { width: 96px; } }

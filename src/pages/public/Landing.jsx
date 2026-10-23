@@ -4,6 +4,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { homeFor } from "../../auth/guards";
 import { Brand } from "../../components/Brand";
 import { EstimateResult, EstimatorForm } from "../../components/Estimator";
+import { SolarHouseScene, StepIcon } from "../../components/Illustrations";
 
 export default function Landing() {
   const { user } = useAuth();
@@ -50,6 +51,7 @@ export default function Landing() {
                 de error promedio del modelo en zonas que no conocía
               </div>
             </div>
+            <SolarHouseScene className="hero-art" />
           </div>
 
           <div className="calc-card">
@@ -88,10 +90,12 @@ export default function Landing() {
           <h2 id="como">Cómo calculamos</h2>
           <ol className="steps">
             <li>
+              <StepIcon kind="bill" />
               <h3>Tu consumo</h3>
               <p className="muted">Partimos de los kWh que tu hogar usa al mes, el dato de tu recibo de luz.</p>
             </li>
             <li>
+              <StepIcon kind="sun" />
               <h3>El sol de tu ciudad</h3>
               <p className="muted">
                 Un modelo de aprendizaje automático estima las horas solares pico de cada mes a partir de la nubosidad,
@@ -99,6 +103,7 @@ export default function Landing() {
               </p>
             </li>
             <li>
+              <StepIcon kind="panel" />
               <h3>Tu sistema</h3>
               <p className="muted">
                 Con esa radiación calculamos cuántos paneles necesitas, cuánto producen en cada mes y cuánto ahorrarías.

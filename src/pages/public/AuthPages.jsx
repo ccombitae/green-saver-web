@@ -4,6 +4,7 @@ import { auth as authApi } from "../../api/endpoints";
 import { useAuth } from "../../auth/AuthContext";
 import { homeFor } from "../../auth/guards";
 import { Brand } from "../../components/Brand";
+import { SolarFieldScene } from "../../components/Illustrations";
 import { Field, useToast } from "../../components/ui";
 import { passwordProblem, validEmail } from "../../utils/format";
 
@@ -12,7 +13,10 @@ function AuthLayout({ title, children, aside }) {
     <div className="auth-wrap">
       <div className="auth-side">
         <Brand />
-        <h2>{aside}</h2>
+        <div>
+          <h2>{aside}</h2>
+          <SolarFieldScene className="auth-art" />
+        </div>
         <p className="small" style={{ color: "#9fc6b1", margin: 0 }}>
           Universidad de Cundinamarca · Seccional Girardot
         </p>
