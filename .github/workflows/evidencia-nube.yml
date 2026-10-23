@@ -1,0 +1,64 @@
+name: Evidencia - pruebas contra Azure
+
+# Se ejecuta a mano (Actions → "Evidencia - pruebas contra Azure" → Run workflow).
+# Prueba la API y la web ya desplegadas en Azure y guarda capturas como artefacto.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  API_URL: https://green-saver-api-e0cjeqdccwg0h9dr.canadacentral-01.azurewebsites.net
+  WEB_URL: https://green-saver-web-c0cydpc6dnbfdzet.canadacentral-01.azurewebsites.net
+
+jobs:
+  evidencia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: API - endpoints públicos
+        run: |
+          mkdir -p evidencia
+          check() {  # método, ruta, cuerpo
+            if [ -n "$3" ]; then
+              code=$(curl -s -o "evidencia/$4.json" -w "%{http_code} %{time_total}" -X "$1" -H "Content-Type: application/json" -d "$3" "$API_URL$2")
+            else
+              code=$(curl -s -o "evidencia/$4.json" -w "%{http_code} %{time_total}" "$API_URL$2")
+            fi
+            echo "$1 $2 -> HTTP ${code%% *} en ${code##* } s" | tee -a evidencia/api.txt
+            [ "${code%% *}" -lt 400 ] || exit 1
+          }
+          check GET / "" raiz
+          check GET /ml/modelo "" modelo
+          check GET /ml/ciudades "" ciudades
+          check POST /ml/estimar '{"consumo_mensual_kwh":250,"ciudad_id":"girardot"}' estimar
+          check GET /ml/eda "" eda
+          code=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL/calculos")
+          echo "GET /calculos sin token -> HTTP $code (debe ser 401)" | tee -a evidencia/api.txt
+          [ "$code" = "401" ]
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Instalar Playwright
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Web - flujo completo en navegador
+        env:
+          ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+        run: node e2e/flujo-completo.cjs | tee evidencia/flujo-web.txt
+
+      - name: Guardar evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencia-azure
+          path: |
+            evidencia/
+            e2e/capturas/
