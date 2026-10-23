@@ -1,0 +1,17 @@
+OK landing
+OK register
+OK calc
+OK history
+OK learn+profile
+FAIL logout-admin page.waitForURL: Timeout 30000ms exceeded.
+FAIL users locator.click: Timeout 30000ms exceeded.
+FAIL quotes locator.click: Timeout 30000ms exceeded.
+FAIL stats locator.click: Timeout 30000ms exceeded.
+FAIL eda locator.click: Timeout 30000ms exceeded.
+FAIL user-system locator.click: Timeout 30000ms exceeded.
+FAIL refresh-token page.evaluate: TypeError: Cannot set properties of null (setting 'token')
+FAIL mobile locator.click: Timeout 30000ms exceeded.
+FAIL guards page.waitForURL: Timeout 30000ms exceeded.
+USUARIO e2e.1792741073350@prueba.com
+ERRORS ["console Failed to load resource: the server responded with a status of 401 (Unauthorized)"]
+9 paso(s) fallaron
