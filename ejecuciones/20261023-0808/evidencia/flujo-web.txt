@@ -1,0 +1,19 @@
+OK landing
+OK register
+OK calc
+OK history
+OK learn+profile
+OK logout-admin
+OK users
+OK quotes
+OK stats
+OK eda
+OK user-system
+   sesión renovada automáticamente
+OK refresh-token
+OK mobile
+user->admin redirected to https://green-saver-web-c0cydpc6dnbfdzet.canadacentral-01.azurewebsites.net/app
+OK guards
+USUARIO e2e.1792742879766@prueba.com
+ERRORS ["console Failed to load resource: the server responded with a status of 401 (Unauthorized)"]
+Todos los pasos pasaron
