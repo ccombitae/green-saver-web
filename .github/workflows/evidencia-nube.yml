@@ -52,7 +52,9 @@ jobs:
       - name: Web - flujo completo en navegador
         env:
           ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
-        run: node e2e/flujo-completo.cjs | tee evidencia/flujo-web.txt
+        run: |
+          set -o pipefail
+          node e2e/flujo-completo.cjs | tee evidencia/flujo-web.txt
 
       - name: Guardar evidencia
         if: always()
