@@ -67,13 +67,18 @@ jobs:
 
       - name: Guardar evidencia en la rama 'evidencia'
         if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           stamp=$(date -u +%Y%m%d-%H%M)
-          mkdir -p /tmp/ev/$stamp && cp -r evidencia e2e/capturas /tmp/ev/$stamp/ 2>/dev/null || true
+          repo="https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          git clone -q --depth 1 --branch evidencia "$repo" /tmp/ev || { mkdir /tmp/ev && cd /tmp/ev && git init -q -b evidencia && git remote add origin "$repo" && cd -; }
+          mkdir -p /tmp/ev/ejecuciones/$stamp
+          cp -r evidencia /tmp/ev/ejecuciones/$stamp/ 2>/dev/null || true
+          cp -r e2e/capturas /tmp/ev/ejecuciones/$stamp/ 2>/dev/null || true
+          cd /tmp/ev
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git fetch origin evidencia 2>/dev/null && git checkout -q evidencia || git checkout -q --orphan evidencia
-          git rm -rqf . 2>/dev/null || true
-          git checkout -q origin/evidencia -- . 2>/dev/null || true
-          mkdir -p ejecuciones && cp -r /tmp/ev/$stamp ejecuciones/
-          git add ejecuciones && git commit -qm "Evidencia $stamp (run ${{ github.run_id }})" && git push -q origin evidencia
+          git add ejecuciones
+          git commit -qm "Evidencia $stamp (run ${{ github.run_id }})"
+          git push -q origin evidencia
