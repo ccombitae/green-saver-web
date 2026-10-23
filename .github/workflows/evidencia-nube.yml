@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write   # para guardar la evidencia en la rama 'evidencia'
 
 env:
   API_URL: https://green-saver-api-e0cjeqdccwg0h9dr.canadacentral-01.azurewebsites.net
@@ -62,3 +62,16 @@ jobs:
           path: |
             evidencia/
             e2e/capturas/
+
+      - name: Guardar evidencia en la rama 'evidencia'
+        if: always()
+        run: |
+          stamp=$(date -u +%Y%m%d-%H%M)
+          mkdir -p /tmp/ev/$stamp && cp -r evidencia e2e/capturas /tmp/ev/$stamp/ 2>/dev/null || true
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git fetch origin evidencia 2>/dev/null && git checkout -q evidencia || git checkout -q --orphan evidencia
+          git rm -rqf . 2>/dev/null || true
+          git checkout -q origin/evidencia -- . 2>/dev/null || true
+          mkdir -p ejecuciones && cp -r /tmp/ev/$stamp ejecuciones/
+          git add ejecuciones && git commit -qm "Evidencia $stamp (run ${{ github.run_id }})" && git push -q origin evidencia
