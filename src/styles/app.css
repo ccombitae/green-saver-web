@@ -150,7 +150,10 @@ table.data td.right, table.data th.right { text-align: right; }
 }
 .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 700 var(--step-1) var(--font-display); }
 .brand:hover { color: #fff; }
-.brand-mark { width: 34px; height: 34px; flex: none; }
+.brand-mark { width: 40px; height: 40px; flex: none; display: grid; place-items: center; background: #fff; border-radius: 11px; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+.brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.public-top .brand-green { color: #3f9a2f; }
+.public-top .brand-saver { color: #1f6fb5; }
 .rail nav { display: grid; gap: 2px; }
 .rail .nav-group { font-size: 12px; color: #9fc6b1; margin: 14px 10px 4px; }
 .rail a.nav {
