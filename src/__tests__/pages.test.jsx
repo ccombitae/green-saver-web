@@ -1,4 +1,4 @@
-import { EquipmentDetails } from "../components/Estimator";
+import { CostDetails, EquipmentDetails } from "../components/Estimator";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -104,5 +104,33 @@ describe("equipos recomendados", () => {
   it("no muestra nada si la API no envía equipos (versión anterior)", () => {
     const { container } = render(<EquipmentDetails result={{}} />);
     expect(container).toBeEmptyDOMElement();
+  });
+});
+
+describe("costo estimado", () => {
+  it("muestra el total, el detalle y el retorno", () => {
+    render(
+      <CostDetails
+        result={{
+          costos: {
+            total_cop: 8136363,
+            costo_por_kwp_cop: 2958677,
+            rango_mercado_cop: [7700000, 13750000],
+            retorno_rango_anios: [3.0, 5.4],
+            detalle: [
+              { rubro: "Paneles", valor_cop: 2900000 },
+              { rubro: "Mano de obra de instalación", valor_cop: 1336364 },
+            ],
+            respaldo_baterias: { costo_adicional_cop: 12314250 },
+            mantenimiento_anual_cop: [300000, 800000],
+            notas: ["Referencia."],
+            fecha_precios: "octubre de 2026",
+            fuentes: ["Autosolar Colombia (2026). Precios."],
+          },
+        }}
+      />
+    );
+    expect(screen.getByText("Mano de obra de instalación")).toBeInTheDocument();
+    expect(screen.getByText(/a 5,4 años/)).toBeInTheDocument();
   });
 });

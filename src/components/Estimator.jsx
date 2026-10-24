@@ -159,6 +159,7 @@ export function EstimateResult({ result, consumption }) {
       <SunStrip months={result.detalle_mensual} consumption={consumption} />
       <p style={{ marginTop: 16 }}>{result.recomendacion}</p>
       <EquipmentDetails result={result} />
+      <CostDetails result={result} />
       <p className="small muted" style={{ margin: 0 }}>
         {SOURCE[result.fuente_hsp] ?? ""} Tarifa de referencia: {cop(result.parametros.tarifa_kwh_cop)} por kWh.
       </p>
@@ -231,6 +232,61 @@ export function EquipmentDetails({ result }) {
         {ins.notas.map((n) => (
           <li key={n}>{n}</li>
         ))}
+      </ul>
+    </div>
+  );
+}
+
+/** Costo estimado del sistema, rango de mercado y retorno simple. */
+export function CostDetails({ result }) {
+  const c = result.costos;
+  if (!c) return null;
+  const [rMin, rMax] = c.retorno_rango_anios || [];
+  return (
+    <div className="equip">
+      <h3 className="equip-title">Costo estimado</h3>
+      <div className="equip-card">
+        <p className="equip-big" style={{ marginBottom: 2 }}>
+          {cop(c.total_cop)}
+        </p>
+        <p className="small muted" style={{ marginTop: 0 }}>
+          {cop(c.costo_por_kwp_cop)} por kWp · Rango de mercado para este tamaño: {cop(c.rango_mercado_cop[0])} a{" "}
+          {cop(c.rango_mercado_cop[1])}
+        </p>
+        <table className="data cost-table">
+          <tbody>
+            {c.detalle.map((r) => (
+              <tr key={r.rubro}>
+                <td>{r.rubro}</td>
+                <td className="right num">{cop(r.valor_cop)}</td>
+              </tr>
+            ))}
+            <tr className="cost-total">
+              <td>Total estimado</td>
+              <td className="right num">{cop(c.total_cop)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <dl className="kv small" style={{ marginTop: 12 }}>
+          <dt>Recuperas la inversión en</dt>
+          <dd>
+            {rMin != null && rMax != null ? `${num(rMin, 1)} a ${num(rMax, 1)} años` : "N/D"} (retorno simple)
+          </dd>
+          <dt>Con respaldo de baterías</dt>
+          <dd>+ {cop(c.respaldo_baterias.costo_adicional_cop)}</dd>
+          <dt>Mantenimiento al año</dt>
+          <dd>
+            {cop(c.mantenimiento_anual_cop[0])} a {cop(c.mantenimiento_anual_cop[1])}
+          </dd>
+        </dl>
+      </div>
+      <ul className="equip-notes small muted">
+        {c.notas.map((n) => (
+          <li key={n}>{n}</li>
+        ))}
+        <li>
+          Precios de referencia consultados en {c.fecha_precios}: {c.fuentes.map((f) => f.split(" (")[0]).join(", ")}.
+        </li>
       </ul>
     </div>
   );

@@ -280,3 +280,5 @@ table.data td.right, table.data th.right { text-align: right; }
 .equip-card .kv dd { font-weight: 600; }
 .equip-notes { margin: 12px 0 0; padding-left: 18px; }
 .equip-notes li { margin-bottom: 4px; }
+.cost-table td { padding: 7px 4px; font-size: var(--step--1); }
+.cost-table .cost-total td { font-weight: 700; border-top: 2px solid var(--leaf); border-bottom: 0; }
