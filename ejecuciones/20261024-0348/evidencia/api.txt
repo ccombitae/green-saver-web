@@ -1,0 +1,6 @@
+GET / -> HTTP 200 en 0.274354 s
+GET /ml/modelo -> HTTP 200 en 0.204896 s
+GET /ml/ciudades -> HTTP 200 en 0.286301 s
+POST /ml/estimar -> HTTP 200 en 0.695462 s
+GET /ml/eda -> HTTP 200 en 0.500463 s
+GET /calculos sin token -> HTTP 401 (debe ser 401)
