@@ -152,15 +152,86 @@ export function EstimateResult({ result, consumption }) {
           <div className="figure-label">CO₂ evitado al año</div>
         </div>
         <div>
-          <div className="figure-value">{num(result.area_aprox_m2, 1)} m²</div>
-          <div className="figure-label">Área aproximada de techo</div>
+          <div className="figure-value">{num(result.instalacion?.area_techo_recomendada_m2 ?? result.area_aprox_m2, 1)} m²</div>
+          <div className="figure-label">Área de techo recomendada</div>
         </div>
       </div>
       <SunStrip months={result.detalle_mensual} consumption={consumption} />
       <p style={{ marginTop: 16 }}>{result.recomendacion}</p>
+      <EquipmentDetails result={result} />
       <p className="small muted" style={{ margin: 0 }}>
         {SOURCE[result.fuente_hsp] ?? ""} Tarifa de referencia: {cop(result.parametros.tarifa_kwh_cop)} por kWh.
       </p>
     </section>
+  );
+}
+
+/** Inversor, instalación en el techo y baterías opcionales (predimensionamiento). */
+export function EquipmentDetails({ result }) {
+  const inv = result.inversor;
+  const ins = result.instalacion;
+  const bat = result.baterias;
+  if (!inv || !ins || !bat) return null;
+  return (
+    <div className="equip">
+      <h3 className="equip-title">Equipos e instalación recomendados</h3>
+      <div className="equip-grid">
+        <article className="equip-card">
+          <h4>Inversor</h4>
+          <p className="equip-big">{num(inv.potencia_kw, inv.potencia_kw % 1 ? 1 : 0)} kW</p>
+          <dl className="kv small">
+            <dt>Tipo</dt>
+            <dd>{inv.tipo}</dd>
+            <dt>Conexión</dt>
+            <dd>{inv.conexion}</dd>
+            <dt>Relación DC/AC</dt>
+            <dd>{num(inv.relacion_dc_ac, 2)}</dd>
+          </dl>
+          <p className="small muted">{inv.alternativa}.</p>
+        </article>
+        <article className="equip-card">
+          <h4>En tu techo</h4>
+          <p className="equip-big">{num(ins.area_techo_recomendada_m2, 1)} m²</p>
+          <dl className="kv small">
+            <dt>Área de paneles</dt>
+            <dd>{num(ins.area_paneles_m2, 1)} m²</dd>
+            <dt>Inclinación</dt>
+            <dd>{ins.inclinacion_grados}°</dd>
+            <dt>Orientación</dt>
+            <dd>{ins.orientacion}</dd>
+            <dt>Peso total</dt>
+            <dd>
+              {num(ins.peso_total_kg, 0)} kg ({num(ins.carga_kg_m2, 1)} kg/m²)
+            </dd>
+            <dt>Producción al año</dt>
+            <dd>
+              {num(result.generacion_anual_kwh, 0)} kWh ({num(result.rendimiento_especifico_kwh_kwp, 0)} kWh por kWp)
+            </dd>
+          </dl>
+        </article>
+        <article className="equip-card">
+          <h4>Baterías (opcional)</h4>
+          <p className="small muted" style={{ marginTop: 0 }}>{bat.tecnologia}</p>
+          <dl className="kv small">
+            <dt>Respaldo nocturno</dt>
+            <dd>
+              {bat.respaldo_nocturno.modulos} módulo{bat.respaldo_nocturno.modulos > 1 ? "s" : ""} ·{" "}
+              {num(bat.respaldo_nocturno.capacidad_instalada_kwh, 2)} kWh
+            </dd>
+            <dt>Un día de autonomía</dt>
+            <dd>
+              {bat.autonomia_un_dia.modulos} módulo{bat.autonomia_un_dia.modulos > 1 ? "s" : ""} ·{" "}
+              {num(bat.autonomia_un_dia.capacidad_instalada_kwh, 2)} kWh
+            </dd>
+          </dl>
+          <p className="small muted">{bat.nota}</p>
+        </article>
+      </div>
+      <ul className="equip-notes small muted">
+        {ins.notas.map((n) => (
+          <li key={n}>{n}</li>
+        ))}
+      </ul>
+    </div>
   );
 }

@@ -267,3 +267,16 @@ table.data td.right, table.data th.right { text-align: right; }
 .welcome p { margin: 0; color: var(--ink-2); }
 @media (max-width: 860px) { .auth-art { display: none; } }
 @media (max-width: 640px) { .welcome-art { width: 96px; } }
+
+/* ---------------------------------------------------------------- equipos recomendados */
+.equip { margin-top: 20px; }
+.equip-title { font-size: var(--step-1); margin: 0 0 10px; }
+.equip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.equip-card > p.small { margin: 10px 0 0; }
+.equip-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+.equip-card h4 { margin: 0 0 4px; font-size: var(--step-0); color: var(--leaf-strong); }
+.equip-big { font: 700 var(--step-2) var(--font-display); margin: 0 0 8px; color: var(--ink); }
+.equip-card .kv { gap: 4px 12px; }
+.equip-card .kv dd { font-weight: 600; }
+.equip-notes { margin: 12px 0 0; padding-left: 18px; }
+.equip-notes li { margin-bottom: 4px; }

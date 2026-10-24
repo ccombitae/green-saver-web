@@ -1,3 +1,4 @@
+import { EquipmentDetails } from "../components/Estimator";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -74,5 +75,34 @@ describe("formularios", () => {
     await userEvent.type(screen.getByLabelText("Confirmar contraseña"), "Clave9999");
     await userEvent.click(screen.getByRole("button", { name: "Crear cuenta" }));
     expect(screen.getByText("Las contraseñas no coinciden.")).toBeInTheDocument();
+  });
+});
+
+describe("equipos recomendados", () => {
+  it("muestra inversor, techo y baterías cuando la API los envía", () => {
+    render(
+      <EquipmentDetails
+        result={{
+          generacion_anual_kwh: 3718,
+          rendimiento_especifico_kwh_kwp: 1352,
+          inversor: { tipo: "Inversor de conexión a red (on-grid)", alternativa: "Híbrido", potencia_kw: 3, relacion_dc_ac: 0.92, conexion: "Monofásico" },
+          instalacion: { area_paneles_m2: 12.9, area_techo_recomendada_m2: 16.1, peso_total_kg: 158, carga_kg_m2: 12.2, inclinacion_grados: 10, orientacion: "Hacia el sur", notas: ["Sin sombras."] },
+          baterias: {
+            tecnologia: "LiFePO4",
+            nota: "Opcional.",
+            respaldo_nocturno: { modulos: 1, capacidad_instalada_kwh: 5.12 },
+            autonomia_un_dia: { modulos: 2, capacidad_instalada_kwh: 10.24 },
+          },
+        }}
+      />
+    );
+    expect(screen.getByText("3 kW")).toBeInTheDocument();
+    expect(screen.getByText("Hacia el sur")).toBeInTheDocument();
+    expect(screen.getByText(/2 módulos/)).toBeInTheDocument();
+  });
+
+  it("no muestra nada si la API no envía equipos (versión anterior)", () => {
+    const { container } = render(<EquipmentDetails result={{}} />);
+    expect(container).toBeEmptyDOMElement();
   });
 });
