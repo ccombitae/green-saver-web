@@ -9,6 +9,11 @@ on:
 permissions:
   contents: read
 
+# Un despliegue a la vez: si llega otro cambio, espera a que termine el anterior.
+concurrency:
+  group: despliegue-azure
+  cancel-in-progress: false
+
 env:
   # La URL de la API se fija al compilar (Vite)
   VITE_API_URL: https://green-saver-api-e0cjeqdccwg0h9dr.canadacentral-01.azurewebsites.net
